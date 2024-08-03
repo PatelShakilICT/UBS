@@ -34,6 +34,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -47,6 +48,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
@@ -322,7 +324,8 @@ fun MainContent(navController: NavHostController) {
         )
 
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(horizontal = 5.dp)
         ) {
             Card(
@@ -420,12 +423,14 @@ fun MainContent(navController: NavHostController) {
                 .background(Color.White)
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(                )
+                modifier = Modifier
+                    .fillMaxWidth()
                     .align(Alignment.Center)
                     .padding(bottom = 80.dp)
             ) {
                 Column(
-                    modifier= Modifier.weight(1f)
+                    modifier= Modifier
+                        .weight(1f)
                         .padding(5.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ){
@@ -445,7 +450,8 @@ fun MainContent(navController: NavHostController) {
                 }
                 Spacer(Modifier.width(10.dp))
                 Column(
-                    modifier= Modifier.weight(1f)
+                    modifier= Modifier
+                        .weight(1f)
                         .padding(5.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ){
@@ -508,7 +514,8 @@ fun SidePanel(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.LightGray)
+            .background(Color.White)
+            .shadow(2.dp, spotColor = Color.LightGray)
     ) {
         val list = listOf(
             Pair(
@@ -525,6 +532,30 @@ fun SidePanel(modifier: Modifier = Modifier) {
             ),
             Pair(
                 "Payer plus tard",
+                R.drawable.ic_launcher_foreground
+            ),
+            Pair(
+                "Paiements automatises",
+                R.drawable.ic_launcher_foreground
+            ),
+            Pair(
+                "Selectinner des offres",
+                R.drawable.ic_launcher_foreground
+            ),
+            Pair(
+                "Recevoir de l'argent",
+                R.drawable.ic_launcher_foreground
+            ),
+            Pair(
+                "Inviter des amis",
+                R.drawable.ic_launcher_foreground
+            ),
+            Pair(
+                "Reglages",
+                R.drawable.ic_launcher_foreground
+            ),
+            Pair(
+                "Logout",
                 R.drawable.ic_launcher_foreground
             )
         )
@@ -545,9 +576,11 @@ fun SidePanel(modifier: Modifier = Modifier) {
                 Text(
                     it.first,
                     modifier = Modifier.padding(horizontal = 5.dp),
-                    style = MaterialTheme.typography.titleSmall
+                    style = MaterialTheme.typography.titleMedium
                 )
             }
+            HorizontalDivider(thickness = .2.dp)
+
         }
 
 
