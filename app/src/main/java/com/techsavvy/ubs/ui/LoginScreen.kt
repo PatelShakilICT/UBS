@@ -27,22 +27,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 
 @Composable
 fun LoginScreen(navController: NavHostController) {
     var otpValue by remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
-    LaunchedEffect(key1 = true) {
-        keyboardController?.show()
+
+    val focusRequester = remember { FocusRequester() }
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
     }
+
 
     Box(
     ) {
@@ -69,7 +73,8 @@ fun LoginScreen(navController: NavHostController) {
             },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 20.dp),
+                    .padding(top = 20.dp)
+                    .focusRequester(focusRequester),
                 keyboardActions = KeyboardActions(
                     onNext = {
                         keyboardController?.hide()

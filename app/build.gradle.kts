@@ -72,10 +72,19 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 //image loading library
     implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
 
 
     //pager library
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)
+
+    // Camerax implementation
+    implementation (libs.androidx.camera.core)
+    implementation (libs.androidx.camera.camera2)
+    implementation (libs.androidx.camera.view)
+    implementation (libs.androidx.camera.lifecycle)
+
+
 
 }

@@ -1,0 +1,4 @@
+JKS Filename : release_v1.jks
+Password : abc123
+alias : key0
+Password : abc123

@@ -1,5 +1,7 @@
 package com.techsavvy.ubs.ui
 
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -22,13 +24,18 @@ import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.CheckCircle
+import androidx.compose.material.icons.outlined.ExitToApp
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -51,8 +58,10 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -64,7 +73,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
@@ -74,6 +82,15 @@ import kotlinx.coroutines.yield
 
 @Composable
 fun DashboardScreen(navController: NavHostController) {
+    val context = LocalContext.current
+    LaunchedEffect(true) {
+        if (context.packageManager.hasSystemFeature(android.content.pm.PackageManager.FEATURE_CAMERA_ANY) &&
+            context.checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED &&
+            context.checkSelfPermission(Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED
+        ) {
+            context.requestCameraPermission()
+        }
+    }
     Column(modifier = Modifier.fillMaxSize()) {
         val drawerState = remember { mutableStateOf(DrawerValue.Closed) }
         var rotate by remember { mutableStateOf(0f) }
@@ -334,19 +351,21 @@ fun MainContent(navController: NavHostController) {
                     .padding(5.dp),
                 elevation = CardDefaults.cardElevation(1.dp),
                 colors = CardDefaults.cardColors(Color.White),
-                shape = RoundedCornerShape(8.dp)
-            ) {
+                shape = RoundedCornerShape(8.dp),
+
+                ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp)
                 ) {
                     Icon(
-                        painterResource(id = R.drawable.ic_qr),
-                        ""
+                        painterResource(id = R.drawable.ic_bons),
+                        "",
+                        modifier = Modifier.rotate(90f)
                     )
                     Text(
-                        "Bone\nabbkbks",
+                        "Bons\nnumeriques",
                         style = MaterialTheme.typography.titleSmall
                     )
                 }
@@ -366,11 +385,11 @@ fun MainContent(navController: NavHostController) {
                         .padding(10.dp)
                 ) {
                     Icon(
-                        painterResource(id = R.drawable.ic_qr),
+                        painterResource(id = R.drawable.ic_mobile),
                         ""
                     )
                     Text(
-                        "Bone\nabbkbks",
+                        "Abonnement\nmobile",
                         style = MaterialTheme.typography.titleSmall
                     )
                 }
@@ -378,7 +397,8 @@ fun MainContent(navController: NavHostController) {
             Spacer(Modifier.width(10.dp))
             Box(
                 modifier = Modifier
-                    .weight(.7f)) {
+                    .weight(.7f)
+            ) {
                 Card(
                     modifier = Modifier
                         .padding(5.dp),
@@ -429,51 +449,58 @@ fun MainContent(navController: NavHostController) {
                     .padding(bottom = 80.dp)
             ) {
                 Column(
-                    modifier= Modifier
+                    modifier = Modifier
                         .weight(1f)
-                        .padding(5.dp),
+                        .padding(5.dp)
+                        .clickable {
+                            navController.navigate("envoyer")
+                        },
                     horizontalAlignment = Alignment.CenterHorizontally
-                ){
+                ) {
                     Box(
-                        modifier= Modifier
+                        modifier = Modifier
                             .size(70.dp)
                             .border(1.dp, Color.Black, CircleShape),
                         contentAlignment = Alignment.Center
-                    ){
+                    ) {
                         Icon(
-                            Icons.Default.ArrowDropDown,
+                            painterResource(id = R.drawable.ic_up),
                             ""
                         )
                     }
-                    Text(text = "Bone\nAdda",
-                        style = MaterialTheme.typography.titleSmall)
+                    Text(
+                        text = "Envoyer",
+                        style = MaterialTheme.typography.titleSmall
+                    )
                 }
                 Spacer(Modifier.width(10.dp))
                 Column(
-                    modifier= Modifier
+                    modifier = Modifier
                         .weight(1f)
                         .padding(5.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
-                ){
+                ) {
                     Box(
-                        modifier= Modifier
+                        modifier = Modifier
                             .size(70.dp)
                             .border(1.dp, Color.Black, CircleShape),
                         contentAlignment = Alignment.Center
-                    ){
+                    ) {
                         Icon(
-                            Icons.Default.KeyboardArrowUp,
+                            painterResource(id = R.drawable.ic_down),
                             ""
                         )
                     }
-                    Text(text = "Bone\nRmeo",
-                        style = MaterialTheme.typography.titleSmall)
+                    Text(
+                        text = "Demander ou\npartager",
+                        style = MaterialTheme.typography.titleSmall
+                    )
                 }
 
             }
             Button(
                 onClick = {
-
+                    navController.navigate("payer")
                 },
                 shape = RoundedCornerShape(4.dp),
                 modifier = Modifier
@@ -505,9 +532,14 @@ fun MainContent(navController: NavHostController) {
         }
 
 
-
     }
 }
+
+data class Obj(
+    val title: String,
+    val icon: Int?,
+    val vector: ImageVector?
+)
 
 @Composable
 fun SidePanel(modifier: Modifier = Modifier) {
@@ -518,45 +550,60 @@ fun SidePanel(modifier: Modifier = Modifier) {
             .shadow(2.dp, spotColor = Color.LightGray)
     ) {
         val list = listOf(
-            Pair(
+            Obj(
                 "Home",
-                R.drawable.ic_launcher_foreground
-            ),
-            Pair(
+                null,
+                Icons.Outlined.Home
+                ),
+            Obj(
                 "Transaction",
-                R.drawable.ic_launcher_foreground
+                null,
+                Icons.AutoMirrored.Outlined.List
             ),
-            Pair(
+            Obj(
                 "Cartes Client",
-                R.drawable.ic_launcher_foreground
+                R.drawable.ic_bons,
+                null
             ),
-            Pair(
+            Obj(
                 "Payer plus tard",
-                R.drawable.ic_launcher_foreground
+                null,
+                Icons.Outlined.ShoppingCart
             ),
-            Pair(
+            Obj(
                 "Paiements automatises",
-                R.drawable.ic_launcher_foreground
+                null,
+                Icons.Outlined.Refresh
             ),
-            Pair(
+            Obj(
                 "Selectinner des offres",
-                R.drawable.ic_launcher_foreground
+                R.drawable.ic_percent,
+                null
             ),
-            Pair(
+            Obj(
+                "Offres activees",
+                null,
+                Icons.Outlined.CheckCircle
+            ),
+            Obj(
                 "Recevoir de l'argent",
-                R.drawable.ic_launcher_foreground
+                R.drawable.ic_hand,
+                null
             ),
-            Pair(
+            Obj(
                 "Inviter des amis",
-                R.drawable.ic_launcher_foreground
+                null,
+                Icons.Outlined.Person
             ),
-            Pair(
+            Obj(
                 "Reglages",
-                R.drawable.ic_launcher_foreground
+                null,
+                Icons.Outlined.Settings
             ),
-            Pair(
+            Obj(
                 "Logout",
-                R.drawable.ic_launcher_foreground
+                null,
+                Icons.Outlined.ExitToApp
             )
         )
         list.forEach {
@@ -566,15 +613,24 @@ fun SidePanel(modifier: Modifier = Modifier) {
                     .clickable {
 
                     }
-                    .padding(5.dp),
+                    .padding(8.dp)
+                    .padding(start = 5.dp),
                 verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    painter = painterResource(id = it.second),
-                    contentDescription = "",
-                    modifier = Modifier.size(30.dp)
-                )
+                it.vector?.let {
+                    Icon(
+                        it,
+                        "",
+                        modifier = Modifier.size(30.dp))
+                }
+                it.icon?.let {
+                    Icon(
+                        painterResource(id = it),
+                        "",
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
                 Text(
-                    it.first,
+                    it.title,
                     modifier = Modifier.padding(horizontal = 5.dp),
                     style = MaterialTheme.typography.titleMedium
                 )
