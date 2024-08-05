@@ -59,64 +59,94 @@ import kotlin.coroutines.suspendCoroutine
 
 @Composable
 fun PayerScreen(navController: NavController) {
-    Column {
-        Text(
-            "Payer",
-            modifier = Modifier
-                .padding(5.dp)
-                .fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodySmall
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = 5.dp),
-                horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
-            ) {
-                Icon(
-                    painterResource(id = R.drawable.ic_qr),
-                    ""
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                HorizontalDivider(
-                    color = Color(0xFF795657),
-                    modifier = Modifier.padding(horizontal = 5.dp),
-                    thickness = 2.dp
-                )
-            }
-            Spacer(modifier = Modifier.width(10.dp))
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(vertical = 5.dp),
-                horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally
-            ) {
-                Icon(
-                    painterResource(id = R.drawable.ic_123),
-                    "",
-                    modifier = Modifier.size(34.dp)
-                )
-            }
-
-        }
-        val context = LocalContext.current
+    val lensFacing = CameraSelector.LENS_FACING_BACK
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
+    val preview = Preview.Builder().build()
+    val previewView = remember {
+        PreviewView(context)
+    }
+    val cameraxSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
+    val imageCapture = remember {
+        ImageCapture.Builder().build()
+    }
+    LaunchedEffect(lensFacing) {
+        val cameraProvider = (context as Activity).getCameraProvider()
+        cameraProvider.unbindAll()
+        cameraProvider.bindToLifecycle(lifecycleOwner, cameraxSelector, preview, imageCapture)
+        preview.setSurfaceProvider(previewView.surfaceProvider)
+    }
+    Box {
         if (context.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) && context.checkSelfPermission(
                 Manifest.permission.CAMERA
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            CameraPreviewScreen()
-        } else {
-            Text(
-                "Camera Permission Denied\nPlease Restart Application",
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center
-            )
+            AndroidView({
+                previewView
+            }, modifier = Modifier
+                .fillMaxSize())
         }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Text(
+                "Payer",
+                modifier = Modifier
+                    .padding(5.dp)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodySmall
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(vertical = 5.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        painterResource(id = R.drawable.ic_qr),
+                        ""
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    HorizontalDivider(
+                        color = Color(0xFF795657),
+                        modifier = Modifier.padding(horizontal = 5.dp),
+                        thickness = 2.dp
+                    )
+                }
+                Spacer(modifier = Modifier.width(10.dp))
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(vertical = 5.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        painterResource(id = R.drawable.ic_123),
+                        "",
+                        modifier = Modifier.size(34.dp)
+                    )
+                }
 
+            }
+            if (context.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) && context.checkSelfPermission(
+                    Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                CameraPreviewScreen(imageCapture)
+            } else {
+                Text(
+                    "Camera Permission Denied\nPlease Restart Application",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+            }
+
+        }
     }
 }
 
@@ -132,28 +162,12 @@ fun Context.requestCameraPermission() {
 
 @SuppressLint("RestrictedApi")
 @Composable
-fun CameraPreviewScreen() {
-    val lensFacing = CameraSelector.LENS_FACING_BACK
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val context = LocalContext.current
-    val preview = Preview.Builder().build()
-    val previewView = remember {
-        PreviewView(context)
-    }
-    val cameraxSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
-    val imageCapture = remember {
-        ImageCapture.Builder().build()
-    }
+fun CameraPreviewScreen(imageCapture: ImageCapture) {
+
     var isFlashLightOn by remember { mutableStateOf(false) }
-    LaunchedEffect(lensFacing) {
-        val cameraProvider = (context as Activity).getCameraProvider()
-        cameraProvider.unbindAll()
-        cameraProvider.bindToLifecycle(lifecycleOwner, cameraxSelector, preview, imageCapture)
-        preview.setSurfaceProvider(previewView.surfaceProvider)
-    }
     Column(modifier = Modifier.fillMaxSize()) {
         Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.weight(.8f)) {
-            AndroidView({ previewView }, modifier = Modifier.fillMaxSize())
+
             IconButton(
                 onClick = {
                     isFlashLightOn = !isFlashLightOn

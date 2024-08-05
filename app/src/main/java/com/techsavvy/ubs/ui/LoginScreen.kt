@@ -1,5 +1,6 @@
 package com.techsavvy.ubs.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -46,19 +48,22 @@ fun LoginScreen(navController: NavHostController) {
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
     }
+    val context = LocalContext.current
 
 
     Box(
     ) {
         Text("Login",
             style = MaterialTheme.typography.titleSmall
-            , modifier = Modifier.align(Alignment.TopCenter).padding(5.dp))
+            , modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(5.dp))
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
-                .padding(bottom =80.dp)
+                .padding(bottom = 80.dp)
                 .align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
@@ -79,7 +84,13 @@ fun LoginScreen(navController: NavHostController) {
                     onNext = {
                         keyboardController?.hide()
                         // Handle the next button action
-                        navController.navigate("dashboard")
+                        if(otpValue.length == 6) {
+                            navController.navigate("dashboard")
+                        }else{
+                            focusRequester.requestFocus()
+
+                            Toast.makeText(context, "Please Enter OTP", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 ),
                 keyboardOptions = KeyboardOptions(

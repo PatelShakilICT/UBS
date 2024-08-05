@@ -113,7 +113,7 @@ fun DashboardScreen(navController: NavHostController) {
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                "UBS",
+                                "YooNee",
                                 fontFamily = FontFamily.Serif,
                                 color = Color.Red,
                                 style = MaterialTheme.typography.titleLarge,

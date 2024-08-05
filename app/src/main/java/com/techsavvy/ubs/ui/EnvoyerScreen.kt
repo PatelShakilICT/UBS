@@ -160,6 +160,7 @@ fun EnvoyerScreen(navController: NavController) {
         LaunchedEffect(Unit) {
             focusRequester.requestFocus()
         }
+        val context = LocalContext.current
 
         Column(modifier = Modifier.fillMaxSize()) {
             TextField(
@@ -189,6 +190,12 @@ fun EnvoyerScreen(navController: NavController) {
                         // Handle the next action
                         if (contact != null && amount.isNotEmpty()) {
                             navController.navigate("success/$amount/${contact?.name}")
+                        }else if(contact == null){
+                            Toast.makeText(context, "Please Select Contact", Toast.LENGTH_SHORT)
+                                .show()
+                        }else if(amount.isEmpty()){
+                            Toast.makeText(context, "Please Enter Amount", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     }
                 ),
