@@ -93,6 +93,7 @@ fun PayerScreen(navController: NavController) {
             Text(
                 "Payer",
                 modifier = Modifier
+                    .background(Color.White)
                     .padding(5.dp)
                     .fillMaxWidth(),
                 textAlign = TextAlign.Center,
@@ -100,6 +101,7 @@ fun PayerScreen(navController: NavController) {
             )
             Row(
                 modifier = Modifier.fillMaxWidth()
+                    .background(Color.White)
             ) {
                 Column(
                     modifier = Modifier
@@ -166,7 +168,7 @@ fun CameraPreviewScreen(imageCapture: ImageCapture) {
 
     var isFlashLightOn by remember { mutableStateOf(false) }
     Column(modifier = Modifier.fillMaxSize()) {
-        Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.weight(.8f)) {
+        Box(contentAlignment = Alignment.BottomCenter, modifier = Modifier.weight(.8f).fillMaxWidth()) {
 
             IconButton(
                 onClick = {
