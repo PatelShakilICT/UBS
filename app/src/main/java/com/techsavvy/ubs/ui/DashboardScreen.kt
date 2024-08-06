@@ -179,7 +179,7 @@ fun DashboardScreen(navController: NavHostController) {
                                                     fontSize = 12.sp
                                                 )
                                             ) {
-                                                append("CHF")
+                                                append("FCFA")
                                             }
                                         },
 
@@ -190,7 +190,7 @@ fun DashboardScreen(navController: NavHostController) {
                                     )
                                 }
                                 Text(
-                                    "Limit TWINT actuelle",
+                                    "Limit YooNee actuelle",
                                     style = MaterialTheme.typography.bodySmall
                                 )
                             }
